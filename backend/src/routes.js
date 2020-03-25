@@ -1,14 +1,10 @@
 const express = require('express');
-const crypto = require('crypto');
+const OngController = require('./controllers/OngController');
 
 const routes = express.Router();
 
-routes.post('/ongs', (request, response) => {
-    const { name, email, whatsapp, city } = request.body;
-    
-    const id = crypto.randomBytes(4).toString('HEX');
+routes.get('/ongs',  OngController.index);
+routes.post('/ongs', OngController.create);
 
-    return response.json();
-});
 
 module.exports = routes;
