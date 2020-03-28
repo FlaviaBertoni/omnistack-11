@@ -8,8 +8,6 @@ import './style.css';
 
 import logoImg from '../../assets/logo.svg';
 
-
-
 export default function Register() {
 
     const history = useHistory();
