@@ -14,7 +14,7 @@ export default function Detail() {
     const route = useRoute();
     
     const { incident } = route.params;
-    const message = `Olá ${incident.name}, estou entrando em contato pois gostaria de ajudar no caso ${incident.title} com o valor de ${formatValue(incident.value)}`;
+    const message = `Olá ${incident.name}, estou entrando em contato pois gostaria de ajudar no caso "${incident.title}" com o valor de ${formatValue(incident.value)}`;
 
     function formatValue(value) {
         return Intl.NumberFormat('pt-BR', { 

@@ -18,6 +18,9 @@ import logoImg from '../../assets/logo.png';
 export default function Incidents() {
     const [incidents, setIncidents] = useState([]);
     const [total, setTotal] = useState(0);
+    const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(false);
+
     const navigation = useNavigation();
 
     function navigateToDetails(incident) {
@@ -25,75 +28,18 @@ export default function Incidents() {
     }
 
     async function loadIncidents() {
-        // const response = await api.get('incidents');
+        if (loading) return;
 
-        // setIncidents(response.data);
-        // setTotal(response.headers['x-total-count']);
+        if (total > 0 && incidents.length === total) return;
 
-        setIncidents([
-            {
-              "id": 2,
-              "title": "Caso 1",
-              "description": "Detalhes do Caso",
-              "value": 120,
-              "ong_id": "71b62f91",
-              "name": "APAD",
-              "email": "contato@teste.com",
-              "whatsapp": "001234123",
-              "city": "Rio do Sul",
-              "uf": "SC"
-            },
-            {
-              "id": 3,
-              "title": "Caso 1",
-              "description": "Detalhes do Caso",
-              "value": 120,
-              "ong_id": "303671f7",
-              "name": "APAD2",
-              "email": "contato@teste.com",
-              "whatsapp": "001234123",
-              "city": "Rio do Sul",
-              "uf": "SC"
-            },
-            {
-              "id": 4,
-              "title": "Caso 2",
-              "description": "Detalhes do Caso",
-              "value": 120,
-              "ong_id": "303671f7",
-              "name": "APAD2",
-              "email": "contato@teste.com",
-              "whatsapp": "001234123",
-              "city": "Rio do Sul",
-              "uf": "SC"
-            },
-            {
-              "id": 5,
-              "title": "Caso 3",
-              "description": "Detalhes do Caso",
-              "value": 120,
-              "ong_id": "303671f7",
-              "name": "APAD2",
-              "email": "contato@teste.com",
-              "whatsapp": "001234123",
-              "city": "Rio do Sul",
-              "uf": "SC"
-            },
-            {
-              "id": 6,
-              "title": "Caso 4",
-              "description": "Detalhes do Caso",
-              "value": 120,
-              "ong_id": "303671f7",
-              "name": "APAD2",
-              "email": "contato@teste.com",
-              "whatsapp": "001234123",
-              "city": "Rio do Sul",
-              "uf": "SC"
-            }
-          ])
+        setLoading(true);
 
-          setTotal(5)
+        const response = await api.get('incidents', { params: { page } });
+
+        setIncidents([ ...incidents, ...response.data ]);
+        setTotal(response.headers['x-total-count']);
+        setPage(page + 1);
+        setLoading(false);
     }
 
     useEffect(() => {
@@ -118,6 +64,8 @@ export default function Incidents() {
                 data={incidents}
                 keyExtractor={incident => String(incident.id)}
                 showsVerticalScrollIndicator={false}
+                onEndReached={loadIncidents}
+                onEndReachedThreshold={0.2}
                 renderItem={({ item: incident }) => (
                     <View style={styles.incident}>
                         <Text style={styles.incidentProperty}>ONG:</Text>
